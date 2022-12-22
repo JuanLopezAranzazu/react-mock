@@ -1,3 +1,4 @@
+/*
 import React, { useState } from "react";
 import "./Dashboard.css";
 import JSONDATA from "./../../MOCK_DATA.json";
@@ -65,6 +66,64 @@ const Dashboard = () => {
           <ListView />
         </Modal>
       )}
+    </div>
+  );
+};
+
+export default Dashboard;
+*/
+
+import React, { useContext, useState } from "react";
+import "./Dashboard.css";
+// context
+import UserContext from "./../../data/UserContext";
+
+const Dashboard = () => {
+  const userContext = useContext(UserContext);
+  const { users, deleteUser } = userContext;
+  const [filtered, setFiltered] = useState([]);
+
+  const handleCheck = (event) => {
+    let updatedList = [...filtered];
+    if (event.target.checked) {
+      updatedList = [...filtered, Number(event.target.value)];
+    } else {
+      updatedList.splice(filtered.indexOf(Number(event.target.value)), 1);
+    }
+    console.log(updatedList);
+    setFiltered(updatedList);
+  };
+
+  return (
+    <div className="dashboard">
+      <div className="options">
+        <button className="btn btn-danger" onClick={() => deleteUser(filtered)}>
+          Delete
+        </button>
+      </div>
+      <div className="data">
+        {users.map((item) => {
+          return (
+            <div
+              className={
+                filtered.includes(item.id)
+                  ? "row-user row-user-checked"
+                  : "row-user"
+              }
+              key={item.id}
+            >
+              <p>{item.first_name}</p>
+              <input
+                style={{ width: "30px", height: "30px" }}
+                value={item.id}
+                type="checkbox"
+                checked={filtered.includes(item.id)}
+                onChange={handleCheck}
+              />
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

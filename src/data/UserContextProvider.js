@@ -21,8 +21,16 @@ const UserContextProvider = (props) => {
     });
   };
 
-  const deleteUser = (id) => {
-    setUsers(users.filter((item) => item.id !== id));
+  /**
+   * delete users
+   * @param {*} data id or array
+   */
+  const deleteUser = (data) => {
+    if (!Array.isArray(data)) {
+      setUsers(users.filter((item) => item.id !== data));
+    } else {
+      setUsers(users.filter((item) => !data.includes(item.id)));
+    }
   };
 
   const updateUser = (id, first_name, last_name, email, gender, ip_address) => {
